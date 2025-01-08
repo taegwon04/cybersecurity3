@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>바이러스와 악성코드란?</title>
+    <title>백신 프로그램 게임</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -16,86 +16,181 @@
             background: linear-gradient(135deg, #1f1c2c, #5a4b81);
             color: #ffffff;
         }
-        #content {
+        #scale-container {
+            transform: scale(0.85); /* 크기 비율 조정 (85%) */
+            transform-origin: center;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #game-container {
+            width: 90%;
+            max-width: 700px;
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 70%;
-            max-width: 800px;
         }
-        #content h1 {
-            font-size: 2.5em;
-            color: #9c27b0; /* 보라색 계열 */
-            text-shadow: 0 0 5px #9c27b0, 0 0 10px #7b1fa2;
-            margin-bottom: 20px;
-        }
-        #content img {
-            width: 150px;
+        #game-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
             margin: 20px 0;
-            border-radius: 50%;
-            border: 3px solid #ffffff;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
-        #content p {
-            font-size: 1.2em;
-            line-height: 1.8;
+        .file {
+            width: 100%;
+            aspect-ratio: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8em;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
-        .rules {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 10px;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-            text-align: left;
-            font-size: 1.2em;
+        .file:before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 8px;
+            width: 30%;
+            height: 10%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
         }
-        .rules li {
-            margin: 10px 0;
+        .infected {
+            background: linear-gradient(135deg, #e53935, #c62828);
         }
-        .example {
+        .file:not(.infected) {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+        }
+        #controls {
             margin-top: 15px;
-            font-style: italic;
-            color: #ffccff;
+            display: none;
         }
-        #content button {
-            padding: 10px 20px;
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 5px;
             background: linear-gradient(90deg, #8e44ad, #9b59b6);
             color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
             box-shadow: 0 4px 10px rgba(155, 89, 182, 0.5);
         }
-        #content button:hover {
+        button:hover {
             background: linear-gradient(90deg, #9b59b6, #8e44ad);
-            box-shadow: 0 6px 15px rgba(155, 89, 182, 0.8);
+        }
+        #status {
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
-    <div id="content">
-        <h1>해커로부터 데이터를 지켜라! - 4</h1>
-        <img src="guard.png" alt="디지털 윤리 지킴이">
-        <p> <strong><span style="color: rgb(178, 16, 178);">바이러스와 악성코드란?</span></strong><br>
-            바이러스와 악성코드는 컴퓨터와 데이터를 손상시키는 유해한 프로그램입니다.<br>
-            아래는 대표적인 유형과 감염 경로입니다:
-        </p>
-        <div class="rules">
-            <ul>
-                <li><strong>대표 유형:</strong> 랜섬웨어, 트로이 목마, 애드웨어.</li>
-                <li><strong>감염 경로:</strong> 이메일 첨부파일, 악성 링크, 감염된 USB.</li>
-            </ul>
+    <div id="scale-container">
+        <div id="game-container">
+            <h1><strong>🎮 <span style="color: white;">백신으로 파일 치료하기 게임</span> 🎮</strong></h1>
+            <p id="instruction">현재 백신이 설치되어 있지 않습니다. 파일 감염이 빠르게 증가합니다!</p>
+            <div id="game-grid"></div>
+            <div id="controls">
+                <button id="updateButton" onclick="updateVirus()">백신 실행 및 업데이트</button>
+                <button onclick="skipAction()">무시하기</button>
+            </div>
+            <button id="installButton" onclick="installAntivirus()">백신 설치</button>
+            <p id="status">현재 감염된 파일: 0개</p>
         </div>
-        <button onclick="goToNext()">다음</button>
     </div>
 
     <script>
-        function goToNext() {
-            location.href = "Cybersecurity_3-2.html"; // 다음 페이지로 이동
+        const grid = document.getElementById('game-grid');
+        const statusText = document.getElementById('status');
+        const instruction = document.getElementById('instruction');
+        const controls = document.getElementById('controls');
+        const installButton = document.getElementById('installButton');
+
+        let files = Array(20).fill(false); // 파일 상태 (false: 정상, true: 감염)
+        let antivirusInstalled = false; // 초기 상태: 백신 설치 X
+        let spreadInterval;
+
+        function initializeInfectedFiles() {
+            for (let i = 0; i < files.length; i++) {
+                if (Math.random() < 0.2) { // 20% 확률로 초기 감염
+                    files[i] = true;
+                }
+            }
         }
+
+        function renderGrid() {
+            grid.innerHTML = '';
+            files.forEach((infected, index) => {
+                const file = document.createElement('div');
+                file.className = `file ${infected ? 'infected' : ''}`;
+                file.textContent = infected ? '감염됨' : '정상';
+                grid.appendChild(file);
+            });
+            updateStatus();
+        }
+
+        function updateStatus() {
+            const infectedCount = files.filter(f => f).length;
+            statusText.textContent = `현재 감염된 파일: ${infectedCount}개`;
+            if (infectedCount === 0) {
+                instruction.textContent = "모든 파일이 안전합니다.🎉 해커로부터 데이터를 지켜냈습니다! 다음 장소로 이동해주세요 :)";
+                clearInterval(spreadInterval);
+            }
+        }
+
+        function spreadVirus() {
+            files.forEach((infected, index) => {
+                if (!infected && Math.random() < (antivirusInstalled ? 0.1 : 0.3)) {
+                    files[index] = true;
+                }
+            });
+            renderGrid();
+        }
+
+        function removeVirus() {
+            files.forEach((infected, index) => {
+                if (infected && Math.random() < 0.5) {
+                    files[index] = false;
+                }
+            });
+        }
+
+        function installAntivirus() {
+            antivirusInstalled = true;
+            installButton.style.display = 'none';
+            controls.style.display = 'block';
+            instruction.textContent = "백신이 설치되었습니다. 업데이트를 통해 감염된 파일을 치료하세요.";
+            clearInterval(spreadInterval);
+            spreadInterval = setInterval(spreadVirus, 2000);
+        }
+
+        function updateVirus() {
+            if (antivirusInstalled) {
+                removeVirus();
+                renderGrid();
+            }
+        }
+
+        function skipAction() {
+            spreadVirus();
+        }
+
+        function startVirusSpread() {
+            spreadInterval = setInterval(spreadVirus, 1500);
+        }
+
+        initializeInfectedFiles();
+        renderGrid();
+        startVirusSpread();
     </script>
 </body>
 </html>
