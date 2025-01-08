@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>백신 프로그램 게임</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1f1c2c, #5a4b81);
+            color: #ffffff;
+        }
+        #intro-container, #game-container {
+            width: 120%;
+            max-width: 700px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        #intro-container h1, #game-container h1 {
+            font-size: 2em;
+            color: #9c27b0;
+            text-shadow: 0 0 5px #9c27b0, 0 0 10px #7b1fa2;
+        }
+        #intro-container p {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        #intro-container img {
+            width: 150px;
+            margin: 20px 0;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            background: linear-gradient(90deg, #8e44ad, #9b59b6);
+            color: white;
+            box-shadow: 0 4px 10px rgba(155, 89, 182, 0.5);
+        }
+        button:hover {
+            background: linear-gradient(90deg, #9b59b6, #8e44ad);
+        }
+        #game-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .file {
+            width: 100%;
+            aspect-ratio: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8em;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .file:before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 8px;
+            width: 30%;
+            height: 10%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+        .infected {
+            background: linear-gradient(135deg, #e53935, #c62828);
+        }
+        .file:not(.infected) {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+        }
+        #controls {
+            margin-top: 15px;
+            display: none;
+        }
+        #status {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="intro-container">
+        <h1>🎮 백신 프로그램으로 데이터를 보호하세요! 🎮</h1>
+        <img src="guard.png" alt="디지털 윤리 지킴이">
+        <p>
+            이 게임에서는 백신 프로그램을 설치하고 감염된 파일을 치료하며,<br> 데이터를 보호하는 방법을 학습합니다.<br><br>
+            백신 설치 전과 후의 파일 감염 속도를 비교하며 보안의 중요성을 체험해보세요.<br><br>
+            <strong><span style="color: green;">'백신 설치', '백신 실행 및 업데이트'</span></strong> 버튼을 누르면 파일이 치료되고,
+             <br> <strong><span style="color: red;">'무시하기'</span></strong> 버튼을 누르면 감염됩니다.<br><br>
+            감염된 파일을 모두 치료하면 게임이 종료됩니다 :)
+        </p>
+        <button onclick="startGame()">게임 시작</button>
+    </div>
+
+    <div id="game-container" style="display: none;">
+        <h1><strong>🎮 <span style="color: white;">백신으로 파일 치료하기 게임</span> 🎮</strong></h1>
+        <p id="instruction">현재 백신이 설치되어 있지 않습니다. 파일 감염이 빠르게 증가합니다!</p>
+        <div id="game-grid"></div>
+        <div id="controls">
+            <button id="updateButton" onclick="updateVirus()">백신 실행 및 업데이트</button>
+            <button onclick="skipAction()">무시하기</button>
+        </div>
+        <button id="installButton" onclick="installAntivirus()">백신 설치</button>
+        <p id="status">현재 감염된 파일: 0개</p>
+    </div>
+
+    <script>
+        const grid = document.getElementById('game-grid');
+        const statusText = document.getElementById('status');
+        const instruction = document.getElementById('instruction');
+        const controls = document.getElementById('controls');
+        const installButton = document.getElementById('installButton');
+        const introContainer = document.getElementById('intro-container');
+        const gameContainer = document.getElementById('game-container');
+
+        let files = Array(20).fill(false); // 파일 상태 (false: 정상, true: 감염)
+        let antivirusInstalled = false; // 초기 상태: 백신 설치 X
+        let spreadInterval;
+
+        function startGame() {
+            introContainer.style.display = 'none';
+            gameContainer.style.display = 'block';
+            initializeInfectedFiles();
+            renderGrid();
+            startVirusSpread();
+        }
+
+        function initializeInfectedFiles() {
+            for (let i = 0; i < files.length; i++) {
+                if (Math.random() < 0.2) { // 20% 확률로 초기 감염
+                    files[i] = true;
+                }
+            }
+        }
+
+        function renderGrid() {
+            grid.innerHTML = '';
+            files.forEach((infected, index) => {
+                const file = document.createElement('div');
+                file.className = `file ${infected ? 'infected' : ''}`;
+                file.textContent = infected ? '감염됨' : '정상';
+                file.onclick = () => alert(`파일 ${index + 1} 상태: ${infected ? '감염됨' : '정상'}`);
+                grid.appendChild(file);
+            });
+            updateStatus();
+        }
+
+        function updateStatus() {
+            const infectedCount = files.filter(f => f).length;
+            statusText.textContent = `현재 감염된 파일: ${infectedCount}개`;
+            if (infectedCount === 0) {
+                instruction.textContent = "모든 파일이 안전합니다.🎉 해커로부터 데이터를 지켜냈습니다. 다음 장소로 이동해주세요 :) ";
+                clearInterval(spreadInterval);
+            }
+        }
+
+        function spreadVirus() {
+            const newlyInfected = [];
+            files.forEach((infected, index) => {
+                if (!infected && Math.random() < (antivirusInstalled ? 0.1 : 0.3)) {
+                    newlyInfected.push(index);
+                }
+            });
+            newlyInfected.forEach(index => files[index] = true);
+            renderGrid();
+        }
+
+        function removeVirus() {
+            files.forEach((infected, index) => {
+                if (infected && Math.random() < 0.5) {
+                    files[index] = false;
+                }
+            });
+        }
+
+        function installAntivirus() {
+            antivirusInstalled = true;
+            installButton.style.display = 'none'; // 백신 설치 버튼 숨김
+            controls.style.display = 'block'; // 백신 업데이트/무시 버튼 표시
+            instruction.textContent = "백신이 설치되었습니다. 업데이트를 통해 감염된 파일을 치료하세요.";
+            clearInterval(spreadInterval);
+            spreadInterval = setInterval(spreadVirus, 2000);
+        }
+
+        function updateVirus() {
+            if (antivirusInstalled) {
+                removeVirus();
+                renderGrid();
+            }
+        }
+
+        function skipAction() {
+            spreadVirus();
+        }
+
+        function startVirusSpread() {
+            spreadInterval = setInterval(spreadVirus, 1500);
+        }
+    </script>
+</body>
+</html>

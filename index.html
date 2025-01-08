@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>바이러스와 악성코드란?</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1f1c2c, #5a4b81);
+            color: #ffffff;
+        }
+        #content {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 70%;
+            max-width: 800px;
+        }
+        #content h1 {
+            font-size: 2.5em;
+            color: #9c27b0; /* 보라색 계열 */
+            text-shadow: 0 0 5px #9c27b0, 0 0 10px #7b1fa2;
+            margin-bottom: 20px;
+        }
+        #content img {
+            width: 150px;
+            margin: 20px 0;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        #content p {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        .rules {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            text-align: left;
+            font-size: 1.2em;
+        }
+        .rules li {
+            margin: 10px 0;
+        }
+        .example {
+            margin-top: 15px;
+            font-style: italic;
+            color: #ffccff;
+        }
+        #content button {
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #8e44ad, #9b59b6);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(155, 89, 182, 0.5);
+        }
+        #content button:hover {
+            background: linear-gradient(90deg, #9b59b6, #8e44ad);
+            box-shadow: 0 6px 15px rgba(155, 89, 182, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <h1>해커로부터 데이터를 지켜라! - 4</h1>
+        <img src="guard.png" alt="디지털 윤리 지킴이">
+        <p> <strong><span style="color: rgb(178, 16, 178);">바이러스와 악성코드란?</span></strong><br>
+            바이러스와 악성코드는 컴퓨터와 데이터를 손상시키는 유해한 프로그램입니다.<br>
+            아래는 대표적인 유형과 감염 경로입니다:
+        </p>
+        <div class="rules">
+            <ul>
+                <li><strong>대표 유형:</strong> 랜섬웨어, 트로이 목마, 애드웨어.</li>
+                <li><strong>감염 경로:</strong> 이메일 첨부파일, 악성 링크, 감염된 USB.</li>
+            </ul>
+        </div>
+        <button onclick="goToNext()">다음</button>
+    </div>
+
+    <script>
+        function goToNext() {
+            location.href = "Cybersecurity_3-2.html"; // 다음 페이지로 이동
+        }
+    </script>
+</body>
+</html>
