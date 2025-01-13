@@ -6,15 +6,20 @@
     <title>바이러스와 악성코드란?</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             background: linear-gradient(135deg, #1f1c2c, #5a4b81);
             color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        #wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* 상단 정렬 */
+            min-height: 100vh; /* 화면 높이 기준 */
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto; /* 세로 스크롤 가능 */
         }
         #content {
             text-align: center;
@@ -76,20 +81,23 @@
     </style>
 </head>
 <body>
-    <div id="content">
-        <h1>해커로부터 데이터를 지켜라! - 4</h1>
-        <img src="guard.png" alt="디지털 윤리 지킴이">
-        <p> <strong><span style="color: rgb(178, 16, 178);">바이러스와 악성코드란?</span></strong><br>
-            바이러스와 악성코드는 컴퓨터와 데이터를 손상시키는 유해한 프로그램입니다.<br>
-            아래는 대표적인 유형과 감염 경로입니다:
-        </p>
-        <div class="rules">
-            <ul>
-                <li><strong>대표 유형:</strong> 랜섬웨어, 트로이 목마, 애드웨어.</li>
-                <li><strong>감염 경로:</strong> 이메일 첨부파일, 악성 링크, 감염된 USB.</li>
-            </ul>
+    <div id="wrapper">
+        <div id="content">
+            <h1>해커로부터 데이터를 지켜라! - 4</h1>
+            <img src="guard.png" alt="디지털 윤리 지킴이">
+            <p>
+                <strong><span style="color: rgb(178, 16, 178);">바이러스와 악성코드란?</span></strong><br>
+                바이러스와 악성코드는 컴퓨터와 데이터를 손상시키는 유해한 프로그램입니다.<br>
+                아래는 대표적인 유형과 감염 경로입니다:
+            </p>
+            <div class="rules">
+                <ul>
+                    <li><strong>대표 유형:</strong> 랜섬웨어, 트로이 목마, 애드웨어.</li>
+                    <li><strong>감염 경로:</strong> 이메일 첨부파일, 악성 링크, 감염된 USB.</li>
+                </ul>
+            </div>
+            <button onclick="goToNext()">다음</button>
         </div>
-        <button onclick="goToNext()">다음</button>
     </div>
 
     <script>
