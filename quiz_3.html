@@ -9,38 +9,33 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             background: linear-gradient(135deg, #1f1c2c, #5a4b81);
             color: #ffffff;
         }
-        #intro-container {
-            width: 90%; /* 크기 조정 */
-            max-width: 700px; /* 첫 페이지 크기 */
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
+        #wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* 상단 정렬 */
+            min-height: 100vh; /* 화면 전체 높이 */
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            overflow-y: auto; /* 스크롤 활성화 */
         }
-        #game-container {
-            width: 40%; /* 두 번째 페이지 크기 */
-            max-width: 550px;
+        #intro-container, #game-container {
+            width: 100%;
+            max-width: 700px;
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            display: none; /* 초기 숨김 */
         }
         #intro-container h1, #game-container h1 {
             font-size: 2em;
             color: #9c27b0;
             text-shadow: 0 0 5px #9c27b0, 0 0 10px #7b1fa2;
         }
-        #intro-container p {
+        #intro-container p, #game-container p {
             font-size: 1em;
             margin: 20px 0;
         }
@@ -112,29 +107,31 @@
     </style>
 </head>
 <body>
-    <div id="intro-container">
-        <h1>🎮 백신 프로그램으로 데이터를 보호하세요! 🎮</h1>
-        <img src="guard.png" alt="디지털 윤리 지킴이">
-        <p>
-            이 게임에서는 백신 프로그램을 설치하고 감염된 파일을 치료하며,<br> 데이터를 보호하는 방법을 학습합니다.<br><br>
-            백신 설치 전과 후의 파일 감염 속도를 비교하며 보안의 중요성을 체험해보세요.<br><br>
-            <strong><span style="color: green;">'백신 설치', '백신 실행 및 업데이트'</span></strong> 버튼을 누르면 파일이 치료되고,
-             <br> <strong><span style="color: red;">'무시하기'</span></strong> 버튼을 누르면 감염됩니다.<br><br>
-            감염된 파일을 모두 치료하면 게임이 종료됩니다 :)
-        </p>
-        <button onclick="startGame()">게임 시작</button>
-    </div>
-
-    <div id="game-container">
-        <h1><strong>🎮 <span style="color: white;">백신으로 파일 치료하기 게임</span> 🎮</strong></h1>
-        <p id="instruction">현재 백신이 설치되어 있지 않습니다. 파일 감염이 빠르게 증가합니다!</p>
-        <div id="game-grid"></div>
-        <div id="controls">
-            <button id="updateButton" onclick="updateVirus()">백신 실행 및 업데이트</button>
-            <button onclick="skipAction()">무시하기</button>
+    <div id="wrapper">
+        <div id="intro-container">
+            <h1>🎮 백신 프로그램으로 데이터를 보호하세요! 🎮</h1>
+            <img src="guard.png" alt="디지털 윤리 지킴이">
+            <p>
+                이 게임에서는 백신 프로그램을 설치하고 감염된 파일을 치료하며,<br> 데이터를 보호하는 방법을 학습합니다.<br><br>
+                백신 설치 전과 후의 파일 감염 속도를 비교하며 보안의 중요성을 체험해보세요.<br><br>
+                <strong><span style="color: green;">'백신 설치', '백신 실행 및 업데이트'</span></strong> 버튼을 누르면 파일이 치료되고,
+                <br> <strong><span style="color: red;">'무시하기'</span></strong> 버튼을 누르면 감염됩니다.<br><br>
+                감염된 파일을 모두 치료하면 게임이 종료됩니다 :)
+            </p>
+            <button onclick="startGame()">게임 시작</button>
         </div>
-        <button id="installButton" onclick="installAntivirus()">백신 설치</button>
-        <p id="status">현재 감염된 파일: 0개</p>
+
+        <div id="game-container" style="display: none;">
+            <h1><strong>🎮 <span style="color: white;">백신으로 파일 치료하기 게임</span> 🎮</strong></h1>
+            <p id="instruction">현재 백신이 설치되어 있지 않습니다. 파일 감염이 빠르게 증가합니다!</p>
+            <div id="game-grid"></div>
+            <div id="controls">
+                <button id="updateButton" onclick="updateVirus()">백신 실행 및 업데이트</button>
+                <button onclick="skipAction()">무시하기</button>
+            </div>
+            <button id="installButton" onclick="installAntivirus()">백신 설치</button>
+            <p id="status">현재 감염된 파일: 0개</p>
+        </div>
     </div>
 
     <script>
