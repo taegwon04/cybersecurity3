@@ -6,15 +6,20 @@
     <title>백신 프로그램과 업데이트</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             background: linear-gradient(135deg, #1f1c2c, #5a4b81);
             color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        #wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* 상단 정렬 */
+            min-height: 100vh; /* 화면 높이 기준 */
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto; /* 세로 스크롤 가능 */
         }
         #content {
             text-align: center;
@@ -71,20 +76,22 @@
     </style>
 </head>
 <body>
-    <div id="content">
-        <h1>해커로부터 데이터를 지켜라! - 4</h1>
-        <img src="guard.png" alt="디지털 윤리 지킴이">
-        <p>
-            <strong><span style="color: rgb(178, 16, 178);">백신 프로그램</span></strong>은 컴퓨터를 안전하게 보호하는 소프트웨어입니다.<br>
-            새로운 바이러스가 매일 등장하기 때문에 항상 최신 상태로 유지해야 합니다.<br>
-        </p>
-        <div class="rules">
-            <ul>
-                <li><strong>백신 프로그램의 주요 기능:</strong> 바이러스 탐지, 악성코드 제거, 실시간 보호</li>
-                <li><strong>업데이트의 중요성:</strong> 최신 바이러스 데이터베이스를 확보하여 새 바이러스에 대비</li>
-            </ul>
+    <div id="wrapper">
+        <div id="content">
+            <h1>해커로부터 데이터를 지켜라! - 4</h1>
+            <img src="guard.png" alt="디지털 윤리 지킴이">
+            <p>
+                <strong><span style="color: rgb(178, 16, 178);">백신 프로그램</span></strong>은 컴퓨터를 안전하게 보호하는 소프트웨어입니다.<br>
+                새로운 바이러스가 매일 등장하기 때문에 항상 최신 상태로 유지해야 합니다.<br>
+            </p>
+            <div class="rules">
+                <ul>
+                    <li><strong>백신 프로그램의 주요 기능:</strong> 바이러스 탐지, 악성코드 제거, 실시간 보호</li>
+                    <li><strong>업데이트의 중요성:</strong> 최신 바이러스 데이터베이스를 확보하여 새 바이러스에 대비</li>
+                </ul>
+            </div>
+            <button onclick="goToNext()">다음</button>
         </div>
-        <button onclick="goToNext()">다음</button>
     </div>
 
     <script>
